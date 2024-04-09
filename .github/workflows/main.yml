@@ -47,4 +47,7 @@ jobs:
           credentials: ${{ secrets.GCP_SERVICE_CREDENTIALS }}
 
       - name: Test
-        run: curl "${{ steps.deploy.outputs.url }}"
+        run: |
+          response=$(curl "${{ steps.deploy.outputs.url }}")
+          echo $response
+          if [[ "$response" == *"Service Unavailable"* ]]; then exit 1; else echo "App is up and running"; fi
